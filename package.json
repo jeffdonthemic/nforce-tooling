@@ -1,0 +1,25 @@
+{
+  "name": "nforce-tooling",
+  "version": "0.0.0",
+  "description": "tooling api extensions for nforce",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kevinohara80/nforce-tooling.git"
+  },
+  "keywords": [
+    "nforce",
+    "salesforce",
+    "tooling",
+    "forcedotcom"
+  ],
+  "author": "Kevin O'Hara",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kevinohara80/nforce-tooling/issues"
+  },
+  "homepage": "https://github.com/kevinohara80/nforce-tooling"
+}
