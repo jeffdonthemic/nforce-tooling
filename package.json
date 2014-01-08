@@ -1,6 +1,6 @@
 {
   "name": "nforce-tooling",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "tooling api extensions for nforce",
   "main": "index.js",
   "scripts": {
