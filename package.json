@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/kevinohara80/nforce-tooling/issues"
   },
-  "homepage": "https://github.com/kevinohara80/nforce-tooling"
+  "homepage": "https://github.com/kevinohara80/nforce-tooling",
+  "dependencies": {
+    "underscore": "~1.5.2"
+  }
 }
