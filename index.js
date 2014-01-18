@@ -4,179 +4,81 @@ var util = require("util");
 module.exports = function(nforce) {
 
   // throws if the plugin already exists
-  var plugin = nforce.plugin('tooling');
-
-  // executes a chunk of Apex code anonymously.
-  plugin.fn('executeAnonymous', function(code, oauth, callback) {
-    var opts;
-
-    if(this.mode === 'single') {
-      var args = Array.prototype.slice.call(arguments);
-      oauth = this.oauth;
-      if(args.length === 2) callback = args[1];
-    }    
-
-    if(!callback) callback = function(){};
-
-    if(typeof code !== 'string') {
-      return callback(new Error('You must specify code to execute'));
-    }    
-
-    if (!this.apiVersion) {
-      return callback(new Error('No API version specified'), null)
-    } else {
-      if (!plugin.util.validateOAuth(this.oauth)) return callback(new Error('Invalid oauth object argument'), null);
-
-      opts = {
-        uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-          + '/tooling/executeAnonymous/?anonymousBody=' + encodeURIComponent(code), 
-        method: 'GET'
-      }
-
-      return this._apiRequest(opts, this.oauth, null, callback);
-    }    
-
-  });  
-
-   // rreturns a raw debug log by ID.
-  plugin.fn('getApexLog', function(id, oauth, callback) {
-    var opts;
-
-    if(this.mode === 'single') {
-      var args = Array.prototype.slice.call(arguments);
-      oauth = this.oauth;
-      if(args.length === 2) callback = args[1];
-    }    
-
-    if(!callback) callback = function(){};
-
-    if (!this.apiVersion) {
-      return callback(new Error('No API version specified'), null)
-    } else {
-      if (!plugin.util.validateOAuth(this.oauth)) return callback(new Error('Invalid oauth object argument'), null);
-
-      opts = {
-        uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-          + '/tooling/sobjects/ApexLog/' + id + '/Body', 
-        method: 'GET'
-      }
-
-      return this._apiRequest(opts, this.oauth, null, callback);
-    }
-
-  });       
+  var plugin = nforce.plugin('tooling');     
 
    // returns a record based upons its ID
-  plugin.fn('getRecord', function(id, name, oauth, callback) {
+  plugin.fn('getRecord', function(args, callback) {
     var opts;
-
-    if(this.mode === 'single') {
-      var args = Array.prototype.slice.call(arguments);
-      oauth = this.oauth;
-      if(args.length === 2) callback = args[1];
-    }    
 
     if(!callback) callback = function(){};
 
-    if (!this.apiVersion) {
-      return callback(new Error('No API version specified'), null)
-    } else {
-      if (!plugin.util.validateOAuth(this.oauth)) return callback(new Error('Invalid oauth object argument'), null);
+    var validator = validate.call(this, args, ['id', 'type']);
+    if (validator.error) return callback(new Error(validator.message), null);  
 
-      opts = {
-        uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-          + '/tooling/sobjects/' + name + '/' + id, 
-        method: 'GET'
-      }
-
-      return this._apiRequest(opts, this.oauth, null, callback);
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/' + args.id, 
+      method: 'GET'
     }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
 
   });     
 
    // returns 'describe' metadata at all levels for the specified object including fields, URLs, and child relationships.
-  plugin.fn('getDescribe', function(name, oauth, callback) {
+  plugin.fn('getDescribe', function(args, callback) {
     var opts;
-
-    if(this.mode === 'single') {
-      var args = Array.prototype.slice.call(arguments);
-      oauth = this.oauth;
-      if(args.length === 2) callback = args[1];
-    }    
 
     if(!callback) callback = function(){};
 
-    if (!this.apiVersion) {
-      return callback(new Error('No API version specified'), null)
-    } else {
-      if (!plugin.util.validateOAuth(this.oauth)) return callback(new Error('Invalid oauth object argument'), null);
+    var validator = validate.call(this, args, ['type']);
+    if (validator.error) return callback(new Error(validator.message), null);  
 
-      opts = {
-        uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-          + '/tooling/sobjects/' + name + '/describe', 
-        method: 'GET'
-      }
-
-      return this._apiRequest(opts, this.oauth, null, callback);
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/describe', 
+      method: 'GET'
     }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
 
   });   
 
     // Returns the high-level metadata for the specified object
-  plugin.fn('getObject', function(name, oauth, callback) {
+  plugin.fn('getObject', function(args, callback) {
     var opts;
-
-    if(this.mode === 'single') {
-      var args = Array.prototype.slice.call(arguments);
-      oauth = this.oauth;
-      if(args.length === 2) callback = args[1];
-    }    
 
     if(!callback) callback = function(){};
 
-    if (!this.apiVersion) {
-      return callback(new Error('No API version specified'), null)
-    } else {
-      if (!plugin.util.validateOAuth(this.oauth)) return callback(new Error('Invalid oauth object argument'), null);
+    var validator = validate.call(this, args, ['type']);
+    if (validator.error) return callback(new Error(validator.message), null);  
 
-      opts = {
-        uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-          + '/tooling/sobjects/' + name, 
-        method: 'GET'
-      }
-
-      console.log(opts);
-
-      return this._apiRequest(opts, this.oauth, null, callback);
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type, 
+      method: 'GET'
     }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
 
   });      
 
   // returns the available Tooling API objects and their metadata.
-  plugin.fn('getObjects', function(oauth, callback) {
+  plugin.fn('getObjects', function(args, callback) {
     var opts;
-
-    if(this.mode === 'single') {
-      var args = Array.prototype.slice.call(arguments);
-      oauth = this.oauth;
-      if(args.length === 2) callback = args[1];
-    }    
 
     if(!callback) callback = function(){};
 
-    if (!this.apiVersion) {
-      return callback(new Error('No API version specified'), null)
-    } else {
-      if (!plugin.util.validateOAuth(this.oauth)) return callback(new Error('Invalid oauth object argument'), null);
+    var validator = validate.call(this, args);
+    if (validator.error) return callback(new Error(validator.message), null);  
 
-      opts = {
-        uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-          + '/tooling/sobjects/', 
-        method: 'GET'
-      }
-
-      return this._apiRequest(opts, this.oauth, null, callback);
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/', 
+      method: 'GET'
     }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
 
   });   
 
@@ -186,7 +88,7 @@ module.exports = function(nforce) {
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args.oauth);
+    var validator = validate.call(this, args, ['name']);
     if (validator.error) return callback(new Error(validator.message), null);
 
     opts = {
@@ -209,7 +111,7 @@ module.exports = function(nforce) {
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args.oauth);
+    var validator = validate.call(this, args, ['id']);
     if (validator.error) return callback(new Error(validator.message), null);
 
     opts = {
@@ -231,7 +133,7 @@ module.exports = function(nforce) {
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args.oauth);
+    var validator = validate.call(this, args, ['containerId', 'artifact']);
     if (validator.error) return callback(new Error(validator.message), null);
 
     // add the container to the artifact
@@ -261,7 +163,7 @@ module.exports = function(nforce) {
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args.oauth);
+    var validator = validate.call(this, args, ['id']);
     if (validator.error) return callback(new Error(validator.message), null);    
 
     opts = {
@@ -287,7 +189,7 @@ module.exports = function(nforce) {
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args.oauth);
+    var validator = validate.call(this, args, ['containerId']);
     if (validator.error) return callback(new Error(validator.message), null);  
 
     // look for passed argements
@@ -315,7 +217,7 @@ module.exports = function(nforce) {
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args.oauth);
+    var validator = validate.call(this, args, ['id']);
     if (validator.error) return callback(new Error(validator.message), null);    
 
     opts = {
@@ -328,6 +230,62 @@ module.exports = function(nforce) {
       if (err) { return callback(err, null); }
       if (!err) { return callback(null, _.pick(results, whitelistKeys)); }
     });        
+
+  });     
+
+  plugin.fn('query', function(args, callback) {
+    var opts;
+
+    if(!callback) callback = function(){};    
+
+    var validator = validate.call(this, args, ['q']);
+    if (validator.error) return callback(new Error(validator.message), null);
+
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/query?q=' + encodeURIComponent(args.q), 
+      method: 'GET'
+    }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
+
+  });
+
+  // executes a chunk of Apex code anonymously.
+  plugin.fn('executeAnonymous', function(args, callback) {
+    var opts;
+
+    if(!callback) callback = function(){};
+
+    var validator = validate.call(this, args, ['code']);
+    if (validator.error) return callback(new Error(validator.message), null);  
+
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/executeAnonymous/?anonymousBody=' + encodeURIComponent(args.code), 
+      method: 'GET'
+    }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
+
+  });  
+
+   // rreturns a raw debug log by ID.
+  plugin.fn('getApexLog', function(args, callback) {
+    var opts;
+
+    if(!callback) callback = function(){};
+
+    var validator = validate.call(this, args, ['id']);
+    if (validator.error) return callback(new Error(validator.message), null);  
+
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/ApexLog/' + args.id + '/Body', 
+      method: 'GET'
+    }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
 
   });    
 
@@ -346,28 +304,10 @@ module.exports = function(nforce) {
     }
     return _.extend(obj, fields);
 
-  });    
-
-  plugin.fn('query', function(q, oauth, callback) {
-    var opts;
-
-    if(!callback) callback = function(){};    
-
-    var validator = validate.call(this, oauth);
-    if (validator.error) return callback(new Error(validator.message), null);
-
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/query?q=' + encodeURIComponent(q), 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, callback);
-
-  });
+  });     
 
   // temp -- helper to get rid of boilerplate code. nforce will fix eventually
-  function validate(oauth) {
+  function validate(args, required) {
     var result = {
       error: false,
       message: 'No errors'
@@ -378,10 +318,21 @@ module.exports = function(nforce) {
       result.message = 'No API version specified';
     }
 
-    if (!plugin.util.validateOAuth(this.oauth)) {
+    if (!plugin.util.validateOAuth(args.oauth)) {
       result.error = true;
       result.message = 'Invalid oauth object argument';
     }
+
+    // ensure required properties were passed in the arguments hash
+    if (required) {
+      var keys = _.keys(args);
+      required.forEach(function(field) {
+        if(!_.contains(keys, field)) {
+          result.error = true;
+          result.message = 'The following values must be passed: ' + required.join(', ');
+        }
+      })
+    }    
 
     if(this.mode === 'single') {
       var args = Array.prototype.slice.call(arguments);
