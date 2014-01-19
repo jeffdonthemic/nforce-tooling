@@ -43,6 +43,25 @@ module.exports = function(nforce) {
 
   });   
 
+   // returns metadata for a specific custom field on a custom object
+  plugin.fn('getCustomField', function(args, callback) {
+    var opts;
+
+    if(!callback) callback = function(){};
+
+    var validator = validate.call(this, args, ['id']);
+    if (validator.error) return callback(new Error(validator.message), null);  
+
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/CustomField/' + args.id, 
+      method: 'GET'
+    }
+
+    return this._apiRequest(opts, this.oauth, null, callback);
+
+  });   
+
     // Returns the high-level metadata for the specified object
   plugin.fn('getObject', function(args, callback) {
     var opts;
