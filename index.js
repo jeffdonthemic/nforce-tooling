@@ -233,6 +233,74 @@ module.exports = function(nforce) {
 
   });     
 
+  // inserts a new record
+  plugin.fn('insert', function(args, callback) {
+    var opts;
+
+    if(!callback) callback = function(){};
+
+    var validator = validate.call(this, args, ['type' , 'object']);
+    if (validator.error) return callback(new Error(validator.message), null);    
+
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type, 
+      method: 'POST',
+      body: JSON.stringify(args.object)
+    }
+
+    this._apiBlobRequest(opts, this.oauth, function(err, results) {
+      if (err) { return callback(err, null); }
+      if (!err) { return callback(null, JSON.parse(results)); }
+    });   
+
+  });     
+
+  // updates an existing record
+  plugin.fn('update', function(args, callback) {
+    var opts;
+
+    if(!callback) callback = function(){};
+
+    var validator = validate.call(this, args, ['id', 'type', 'object']);
+    if (validator.error) return callback(new Error(validator.message), null);    
+
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/' + args.id, 
+      method: 'PATCH',
+      body: JSON.stringify(args.object)
+    }
+
+    this._apiRequest(opts, this.oauth, null, function(err, results) {
+      if (err) { return callback(err, null); }
+      if (!err) { return callback(null, {success: true}); }
+    });       
+
+  });     
+
+  // deletes a record by id
+  plugin.fn('delete', function(args, callback) {
+    var opts;
+
+    if(!callback) callback = function(){};
+
+    var validator = validate.call(this, args, ['id', 'type']);
+    if (validator.error) return callback(new Error(validator.message), null);    
+
+    opts = {
+      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/' + args.id, 
+      method: 'DELETE'
+    }
+
+    this._apiBlobRequest(opts, this.oauth, function(err, results) {
+      if (err) { return callback(err, null); }
+      if (!err) { return callback(null, {success: true}); }
+    });
+
+  });     
+
   plugin.fn('query', function(args, callback) {
     var opts;
 
