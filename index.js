@@ -1,5 +1,4 @@
-var _ = require('underscore');
-var util = require("util");
+var _ = require('lodash');
 
 module.exports = function(nforce) {
 

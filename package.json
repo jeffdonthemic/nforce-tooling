@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/kevinohara80/nforce-tooling",
   "dependencies": {
-    "underscore": "~1.5.2"
+    "lodash": "~2.4.1"
   }
 }
