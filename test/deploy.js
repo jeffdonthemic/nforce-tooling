@@ -1,15 +1,14 @@
 var nforce = require("nforce");
 var tooling = require('../')(nforce);
 var should = require("should");
+var config = require("./config");
 
-var sfuser = '';
-var sfpass = '';
 var oauth;
 
 var org = nforce.createConnection({
-  clientId: '',
-  clientSecret: '',
-  redirectUri: 'http://localhost:3000/oauth/_callback',
+  clientId: config.connection.clientId,
+  clientSecret: config.connection.clientSecret,
+  redirectUri: config.connection.redirectUri,
   mode: 'single',
   plugins: ['tooling']
 });
