@@ -2,13 +2,13 @@ var nforce = require("nforce");
 var tooling = require('../')(nforce);
 var should = require("should");
 
-var sfuser = 'df13@jeffdouglas.com';
-var sfpass = '!dreamforce13sIx3nNOJDnp5au74JWeEMyUk9';
+var sfuser = '';
+var sfpass = '';
 var oauth;
 
 var org = nforce.createConnection({
   clientId: '3MVG9A2kN3Bn17ht1YQvQ6nm.jFel8rlyJZmshbAk1q2jOWva9KnNpzRoTR5n2LxulHbXMm0UucBJiOk_Rx7b',
-  clientSecret: '4527253748424741492',
+  clientSecret: '',
   redirectUri: 'http://localhost:3000/oauth/_callback',
   mode: 'single',
   plugins: ['tooling']
