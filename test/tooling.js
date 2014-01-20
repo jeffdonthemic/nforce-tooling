@@ -1,25 +1,22 @@
 var nforce = require("nforce");
 var tooling = require('../')(nforce);
 var should = require("should");
+var config = require("./config");
 
-var sfuser = '';
-var sfpass = '';
 var oauth;
 
 var org = nforce.createConnection({
-  clientId: '3MVG9A2kN3Bn17ht1YQvQ6nm.jFel8rlyJZmshbAk1q2jOWva9KnNpzRoTR5n2LxulHbXMm0UucBJiOk_Rx7b',
-  clientSecret: '',
-  redirectUri: 'http://localhost:3000/oauth/_callback',
+  clientId: config.connection.clientId,
+  clientSecret: config.connection.clientSecret,
+  redirectUri: config.connection.redirectUri,
   mode: 'single',
   plugins: ['tooling']
 });
 
 describe('tooling plugin', function() {  
-  this.timeout(10000);
 
   describe('#insert()', function(){
     it('should create a new MetadataContainer record successfully', function(done){
-      this.timeout(5000);
       org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestInsertContainer'}, oauth: oauth}, function(err, resp) {
         resp.success.should.eql(true);  
         // delete the record we just inserted
@@ -32,21 +29,24 @@ describe('tooling plugin', function() {
   })    
 
   describe('#update()', function(){
-    it.only('should a update MetadataContainer record successfully', function(done){
-      this.timeout(5000);
-      org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestDeleteContainer'}, oauth: oauth}, function(err, resp) {
-        // delete the record we just inserted
-        org.tooling.delete({type: 'MetadataContainer', id: resp.id, oauth: oauth}, function(err, resp) {
+    it('should update MetadataContainer record successfully', function(done){
+      org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestUpdateContainer'}, oauth: oauth}, function(err, resp) {
+        // update the record we just inserted
+        var containerId = resp.id;
+        org.tooling.update({type: 'MetadataContainer', id: containerId, object: { name: 'TestUpdateContainerModified' }, oauth: oauth}, function(err, resp) {
           resp.success.should.eql(true);  
-          done();
-        }); 
+          // delete the record we just inserted
+          org.tooling.delete({type: 'MetadataContainer', id: containerId, oauth: oauth}, function(err, resp) {
+            if (err) console.log('Could not delete MetadataContainer ' + containerId + ': ' + err.message); 
+            done();
+          }); 
+        });
       });
     })
   })   
 
   describe('#delete()', function(){
     it('should a MetadataContainer record successfully', function(done){
-      this.timeout(5000);
       org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestDeleteContainer'}, oauth: oauth}, function(err, resp) {
         // delete the record we just inserted
         org.tooling.delete({type: 'MetadataContainer', id: resp.id, oauth: oauth}, function(err, resp) {
@@ -58,7 +58,7 @@ describe('tooling plugin', function() {
   })      
 
   describe('#query()', function(){
-    it('should return an array of at least 1 record', function(done){
+    it('should return an array of 1 record', function(done){
       var q = 'SELECT Id, Name FROM ApexClass Limit 1';
       org.tooling.query({q: q, oauth: oauth}, function(err, resp) {
         resp.size.should.eql(1);
@@ -78,10 +78,6 @@ describe('tooling plugin', function() {
       })
     })
   })  
-
-  describe('#getApexLog()', function(){
-    it('should still be pending')
-  })   
 
   describe('#getDescribe()', function(){
     it('should return an metadata object with a matching name', function(done){
@@ -111,15 +107,46 @@ describe('tooling plugin', function() {
   })
 
   describe('#getRecord()', function(){
-    it('should still be pending')
+    it('should return the requested record', function(done){
+      var q = 'SELECT Id, Name FROM ApexClass Limit 1';
+      org.tooling.query({q: q, oauth: oauth}, function(err, resp) {
+        var apexClassId = resp.records[0].Id;
+        org.tooling.getRecord({id: apexClassId, type: 'ApexClass', oauth: oauth}, function(err, resp) {  
+          resp.Id.should.eql(apexClassId);
+          done();
+        });
+      })      
+    })
   })  
 
   describe('#getCustomField()', function(){
-    it('should still be pending')
-  })    
+    if (config.records.custsomFieldId) {
+      it('should return an object with an attribute type of CustomField', function(done){
+        org.tooling.getCustomField({id: config.records.custsomFieldId, oauth: oauth}, function(err, resp) {
+          resp.attributes.type.should.eql('CustomField');
+          done();
+        });
+      })
+    } else {
+      it('should not test successfully. Please enter the ID of a custom field from a custom object into config.js')
+    }    
+  }) 
+
+  describe('#getApexLog()', function(){
+    if (config.records.apexLogId) {
+      it('should return the apex log info', function(done){
+        org.tooling.getApexLog({id: config.records.apexLogId, oauth: oauth}, function(err, resp) {
+          resp.should.be.ok
+          done();
+        });
+      })
+    } else {
+      it('should not test successfully. Please enter the ID of Apex Log file into config.js')
+    }    
+  })   
 
   before(function(done){
-    org.authenticate({ username: sfuser, password: sfpass}, function(err, resp){
+    org.authenticate({ username: config.connection.sfuser, password: config.connection.sfpass}, function(err, resp){
       if (!err) oauth = resp;
       if (err) console.log('Error connecting to Salesforce: ' + err.message); 
       done();
