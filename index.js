@@ -1,9 +1,11 @@
 var _ = require('lodash');
 
-module.exports = function(nforce) {
+module.exports = function(nforce, pluginName) {
+
+  if (!pluginName) pluginName = 'tooling';
 
   // throws if the plugin already exists
-  var plugin = nforce.plugin('tooling');     
+  var plugin = nforce.plugin(pluginName);
 
    // returns a record based upons its ID
   plugin.fn('getRecord', function(args, callback) {
