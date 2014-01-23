@@ -1,10 +1,10 @@
 {
   "name": "nforce-tooling",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "tooling api extensions for nforce",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -21,5 +21,14 @@
   "bugs": {
     "url": "https://github.com/kevinohara80/nforce-tooling/issues"
   },
-  "homepage": "https://github.com/kevinohara80/nforce-tooling"
+  "homepage": "https://github.com/kevinohara80/nforce-tooling",
+  "dependencies": {
+    "lodash": "~2.4.1"
+  },
+  "devDependencies": {
+    "nforce": "git://github.com/kevinohara80/nforce.git#v0.7.0-alpha.1",
+    "mocha": "~1.17.0",
+    "should": "~3.0.1",
+    "q": "~1.0.0"
+  }
 }
