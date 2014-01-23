@@ -13,11 +13,12 @@ var org = nforce.createConnection({
   plugins: ['tooling']
 });
 
-describe('tooling plugin', function() {  
+describe('plugin', function() {  
 
   describe('#insert()', function(){
     it('should create a new MetadataContainer record successfully', function(done){
       org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestInsertContainer'}, oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         resp.success.should.eql(true);  
         // delete the record we just inserted
         org.tooling.delete({type: 'MetadataContainer', id: resp.id, oauth: oauth}, function(err, resp) {
@@ -29,8 +30,9 @@ describe('tooling plugin', function() {
   })    
 
   describe('#update()', function(){
-    it('should update MetadataContainer record successfully', function(done){
+    it('should update a MetadataContainer record successfully', function(done){
       org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestUpdateContainer'}, oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         // update the record we just inserted
         var containerId = resp.id;
         org.tooling.update({type: 'MetadataContainer', id: containerId, object: { name: 'TestUpdateContainerModified' }, oauth: oauth}, function(err, resp) {
@@ -46,8 +48,9 @@ describe('tooling plugin', function() {
   })   
 
   describe('#delete()', function(){
-    it('should a MetadataContainer record successfully', function(done){
+    it('should delete a MetadataContainer record successfully', function(done){
       org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestDeleteContainer'}, oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         // delete the record we just inserted
         org.tooling.delete({type: 'MetadataContainer', id: resp.id, oauth: oauth}, function(err, resp) {
           resp.success.should.eql(true);  
@@ -61,6 +64,7 @@ describe('tooling plugin', function() {
     it('should return an array of 1 record', function(done){
       var q = 'SELECT Id, Name FROM ApexClass Limit 1';
       org.tooling.query({q: q, oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         resp.size.should.eql(1);
         resp.records.should.be.instanceof(Array);      
         done();
@@ -69,9 +73,10 @@ describe('tooling plugin', function() {
   })    
 
   describe('#executeAnonymous()', function(){
-    it('should return an array of at least 1 record', function(done){
+    it('should return the results of execAnon successfully', function(done){
       var code = "System.debug('hello world');";
       org.tooling.executeAnonymous({code: code, oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         resp.compiled.should.eql(true);
         resp.success.should.eql(true);
         done();
@@ -82,6 +87,7 @@ describe('tooling plugin', function() {
   describe('#getDescribe()', function(){
     it('should return an metadata object with a matching name', function(done){
       org.tooling.getDescribe({type: 'TraceFlag', oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         resp.name.should.eql('TraceFlag');
         done();
       })
@@ -91,6 +97,7 @@ describe('tooling plugin', function() {
   describe('#getOject()', function(){
     it('should return an object with a matching name', function(done){
       org.tooling.getObject({type: 'TraceFlag', oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         resp.objectDescribe.name.should.eql('TraceFlag');
         done();
       })
@@ -100,6 +107,7 @@ describe('tooling plugin', function() {
   describe('#getOjects()', function(){
     it('should return a array of objects', function(done){
       org.tooling.getObjects({oauth: oauth}, function(err, resp) {
+        if (config.debug) console.log(resp);
         resp.sobjects.should.be.instanceof(Array)
         done();
       })
@@ -112,6 +120,7 @@ describe('tooling plugin', function() {
       org.tooling.query({q: q, oauth: oauth}, function(err, resp) {
         var apexClassId = resp.records[0].Id;
         org.tooling.getRecord({id: apexClassId, type: 'ApexClass', oauth: oauth}, function(err, resp) {  
+          if (config.debug) console.log(resp);
           resp.Id.should.eql(apexClassId);
           done();
         });
@@ -123,6 +132,7 @@ describe('tooling plugin', function() {
     if (config.records.custsomFieldId) {
       it('should return an object with an attribute type of CustomField', function(done){
         org.tooling.getCustomField({id: config.records.custsomFieldId, oauth: oauth}, function(err, resp) {
+          if (config.debug) console.log(resp);
           resp.attributes.type.should.eql('CustomField');
           done();
         });
@@ -136,6 +146,7 @@ describe('tooling plugin', function() {
     if (config.records.apexLogId) {
       it('should return the apex log info', function(done){
         org.tooling.getApexLog({id: config.records.apexLogId, oauth: oauth}, function(err, resp) {
+          if (config.debug) console.log(resp);
           resp.should.be.ok
           done();
         });
