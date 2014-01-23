@@ -153,11 +153,11 @@ module.exports = function(nforce, pluginName) {
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args, ['containerId', 'artifact']);
+    var validator = validate.call(this, args, ['id', 'artifact']);
     if (validator.error) return callback(new Error(validator.message), null);
 
     // add the container to the artifact
-    args.artifact.metadataContainerId = args.containerId;
+    args.artifact.metadataContainerId = args.id;
 
     // create the body for the request without any null properties and type
     _.pairs(args.artifact).forEach(function(entry) {
@@ -204,12 +204,12 @@ module.exports = function(nforce, pluginName) {
     var opts, 
       body = { 
         isCheckOnly: true,
-        metadataContainerId: args.containerId
+        metadataContainerId: args.id
       };
 
     if(!callback) callback = function(){};
 
-    var validator = validate.call(this, args, ['containerId']);
+    var validator = validate.call(this, args, ['id']);
     if (validator.error) return callback(new Error(validator.message), null);  
 
     // look for passed argements
