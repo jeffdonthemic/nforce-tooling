@@ -3,6 +3,11 @@ var config = {}
 config.connection = {}
 config.records = {}
 
+// mocha timeout for the entire suite
+config.timeout = 10000;
+// displays results from salesforce api calls
+config.debug = false;
+
 config.connection.sfuser = '';
 config.connection.sfpass = '';
 config.connection.clientId = '';
