@@ -1,14 +1,14 @@
 {
   "name": "nforce-tooling",
   "version": "0.0.1",
-  "description": "tooling api extensions for nforce",
+  "description": "Force.com Tooling API plugin for nforce",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/kevinohara80/nforce-tooling.git"
+    "url": "git://github.com/jeffdonthemic/nforce-tooling.git"
   },
   "keywords": [
     "nforce",
@@ -16,17 +16,17 @@
     "tooling",
     "forcedotcom"
   ],
-  "author": "Kevin O'Hara",
+  "author": "Jeff Douglas",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kevinohara80/nforce-tooling/issues"
+    "url": "https://github.com/jeffdonthemic/nforce-tooling/issues"
   },
-  "homepage": "https://github.com/kevinohara80/nforce-tooling",
+  "homepage": "https://github.com/jeffdonthemic/nforce-tooling",
   "dependencies": {
     "lodash": "~2.4.1"
   },
   "devDependencies": {
-    "nforce": "git://github.com/kevinohara80/nforce.git#v0.7.0-alpha.1",
+    "nforce": "*",
     "mocha": "~1.17.0",
     "should": "~3.0.1",
     "q": "~1.0.0"
