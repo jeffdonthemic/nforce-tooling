@@ -2,7 +2,6 @@ var nforce = require("nforce");
 var deploy = require('../')(nforce, 'deploy');
 var should = require("should");
 var Q = require("q")
-// var mochaAsPromised = require("mocha-as-promised")();
 var config = require("./config");
 
 var oauth;
@@ -45,7 +44,7 @@ describe('deploy', function() {
   })   
 
   describe('#getContainer()', function(){
-    it('should create a new deployment container successfully', function(done){
+    it('should return a deployment container successfully', function(done){
       var name = 'TestGetContainer';
       var containerId;
       var assertError;
@@ -250,7 +249,7 @@ describe('deploy', function() {
 
 function createContainerAsPromised(name) {
   var deferred = Q.defer();
-  org.deploy.createContainer({name: name, oauth: oauth}, function(err, resp) {
+  org.deploy.createContainer({name: name}, function(err, resp) {
     if (config.debug) {
       console.log('Creating container....');
       console.log(resp);
@@ -263,7 +262,7 @@ function createContainerAsPromised(name) {
 
 function deleteAsPromised(type, id) {
   var deferred = Q.defer();
-  org.deploy.delete({type: type, id: id, oauth: oauth}, function(err, resp) {
+  org.deploy.delete({type: type, id: id}, function(err, resp) {
     if (config.debug) {
       console.log('Deleting ' + type + '....');
       console.log(resp);
@@ -276,7 +275,7 @@ function deleteAsPromised(type, id) {
 
 function getContainerAsPromised(id) {
   var deferred = Q.defer();
-  org.deploy.getContainer({id: id, oauth: oauth}, function(err, resp) {
+  org.deploy.getContainer({id: id}, function(err, resp) {
     if (config.debug) {
       console.log('Get container....');
       console.log(resp);
@@ -289,7 +288,7 @@ function getContainerAsPromised(id) {
 
 function getContainerStatusAsPromised(id) {
   var deferred = Q.defer();
-  org.deploy.getContainerDeployStatus({id: id, oauth: oauth}, function(err, resp) {
+  org.deploy.getContainerDeployStatus({id: id}, function(err, resp) {
     if (config.debug) {
       console.log('Get container status....');
       console.log(resp);
@@ -306,7 +305,7 @@ function createApexClassAsPromised() {
     name: 'MochaToolingTest',
     body: 'public class MochaToolingTest {\n\n}'
   }
-  org.deploy.insert({type: 'ApexClass', object: obj, oauth: oauth}, function(err, resp) {
+  org.deploy.insert({type: 'ApexClass', object: obj}, function(err, resp) {
     if (config.debug) {
       console.log('Inserting ApexClass....');
       console.log(resp);
@@ -319,7 +318,7 @@ function createApexClassAsPromised() {
 
 function addContainerArtifactAsPromised(id, artifact) {
   var deferred = Q.defer();
-  org.deploy.addContainerArtifact({id: id, artifact: artifact, oauth: oauth}, function(err, resp) {
+  org.deploy.addContainerArtifact({id: id, artifact: artifact}, function(err, resp) {
     if (config.debug) {
       console.log('Adding container artifact....');
       console.log(resp);
@@ -332,7 +331,7 @@ function addContainerArtifactAsPromised(id, artifact) {
 
 function deployContainerAsPromised(id) {
   var deferred = Q.defer();
-  org.deploy.deployContainer({id: id, oauth: oauth}, function(err, resp) {
+  org.deploy.deployContainer({id: id}, function(err, resp) {
     if (config.debug) {
       console.log('Deploying container....');
       console.log(resp);
@@ -345,7 +344,7 @@ function deployContainerAsPromised(id) {
 
 function getDeployStatusAsPromised(id) {
   var deferred = Q.defer();
-  org.deploy.getContainerDeployStatus({id: id, oauth: oauth}, function(err, resp) {
+  org.deploy.getContainerDeployStatus({id: id}, function(err, resp) {
     if (config.debug) {
       console.log('Get deploy status....');
       console.log(resp);
