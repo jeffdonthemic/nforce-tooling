@@ -9,151 +9,113 @@ module.exports = function(nforce, pluginName) {
 
    // returns a record based upons its ID
   plugin.fn('getRecord', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id', 'type']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['id', 'type']);
-    if (validator.error) return callback(new Error(validator.message), null);  
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/' + args.id;
+    opts.method = 'GET';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/' + args.type + '/' + args.id, 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });     
 
    // returns 'describe' metadata at all levels for the specified object including fields, URLs, and child relationships.
   plugin.fn('getDescribe', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['type']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['type']);
-    if (validator.error) return callback(new Error(validator.message), null);  
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/describe';
+    opts.method = 'GET';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/' + args.type + '/describe', 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });   
 
    // returns metadata for a specific custom field on a custom object
   plugin.fn('getCustomField', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['id']);
-    if (validator.error) return callback(new Error(validator.message), null);  
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/CustomField/' + args.id;
+    opts.method = 'GET';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/CustomField/' + args.id, 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });   
 
     // Returns the high-level metadata for the specified object
   plugin.fn('getObject', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['type']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['type']);
-    if (validator.error) return callback(new Error(validator.message), null);  
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type;
+    opts.method = 'GET';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/' + args.type, 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });      
 
   // returns the available Tooling API objects and their metadata.
   plugin.fn('getObjects', function(args, callback) {
-    var opts;
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/';
+    opts.method = 'GET';
 
-    var validator = validate.call(this, args);
-    if (validator.error) return callback(new Error(validator.message), null);  
-
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/', 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });   
 
   // creates a MetadataContainer to hold deployment objects
   plugin.fn('createContainer', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['name']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
-
-    var validator = validate.call(this, args, ['name']);
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/MetadataContainer', 
-      method: 'POST',
-      body: JSON.stringify({name: args.name})
-    }
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/MetadataContainer';
+    opts.method = 'POST';
+    opts.body = JSON.stringify({name: args.name});
 
-    this._apiBlobRequest(opts, this.oauth, function(err, results) {
-      if (err) { return callback(err, null); }
-      if (!err) { return callback(null, JSON.parse(results)); }
-    });    
+    return this._apiRequest(opts, opts.callback);
 
   });   
 
   // returns a MetadataContainer by id
   plugin.fn('getContainer', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
-
-    var validator = validate.call(this, args, ['id']);
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/MetadataContainer/' + args.id, 
-      method: 'GET'
-    }
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/MetadataContainer/' + args.id;
+    opts.method = 'GET';
 
-    this._apiBlobRequest(opts, this.oauth, function(err, results) {
-      if (err) { return callback(err, null); }
-      if (!err) { return callback(null, JSON.parse(results)); }
-    });    
+    return this._apiRequest(opts, opts.callback);
 
   });    
 
   // returns a MetadataContainer by id
   plugin.fn('addContainerArtifact', function(args, callback) {
-    var opts, body = {};
+    var validator = validate(args, ['id', 'artifact']);
+    var opts = this._getOpts(args, callback);
+    var body = {};
 
-    if(!callback) callback = function(){};
-
-    var validator = validate.call(this, args, ['id', 'artifact']);
     if (validator.error) return callback(new Error(validator.message), null);
 
     // add the container to the artifact
@@ -166,87 +128,67 @@ module.exports = function(nforce, pluginName) {
       }
     });
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/' + args.artifact.type, 
-      method: 'POST',
-      body: JSON.stringify(body)
-    }
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.artifact.type;
+    opts.method = 'POST'
+    opts.body = JSON.stringify(body);
 
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });    
 
   // deletes a MetadataContainer by id
   plugin.fn('deleteContainer', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['id']);
-    if (validator.error) return callback(new Error(validator.message), null);    
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/MetadataContainer/' + args.id;
+    opts.method = 'DELETE';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/MetadataContainer/' + args.id, 
-      method: 'DELETE'
-    }
-
-    this._apiBlobRequest(opts, this.oauth, function(err, results) {
-      if (err) { return callback(err, null); }
-      if (!err) { return callback(null, {success: true}); }
-    });
+    return this._apiRequest(opts, opts.callback);
 
   });    
 
  // deploys a MetadataContainer and all objects
   plugin.fn('deployContainer', function(args, callback) {
-    var opts, 
-      body = { 
+    var validator = validate(args, ['id']);
+    var opts = this._getOpts(args, callback);
+    var body = { 
         isCheckOnly: true,
         metadataContainerId: args.id
-      };
+    };
 
-    if(!callback) callback = function(){};
-
-    var validator = validate.call(this, args, ['id']);
-    if (validator.error) return callback(new Error(validator.message), null);  
+    if (validator.error) return callback(new Error(validator.message), null);
 
     // look for passed argements
     if (!_.isUndefined(args.isCheckOnly)) body.isCheckOnly = args.isCheckOnly;      
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/ContainerAsyncRequest', 
-      method: 'POST',
-      body: JSON.stringify(body)
-    }
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/ContainerAsyncRequest';
+    opts.method = 'POST';
+    opts.body = JSON.stringify(body);
 
-    this._apiBlobRequest(opts, this.oauth, function(err, results) {
-      if (err) { return callback(err, null); }
-      if (!err) { return callback(null, JSON.parse(results)); }
-    });        
+    return this._apiRequest(opts, opts.callback);      
 
   });    
 
   // checks the current status of a deployment
   plugin.fn('getContainerDeployStatus', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id']);
     // specify the properties to be returned from salesforce
-    var whitelistKeys = ['Id', 'MetadataContainerId', 'ErrorMsg', 'CompilerErrors', 'IsRunTests', 'State', 'IsCheckOnly'];
+    var whitelistKeys = ['Id', 'MetadataContainerId', 'ErrorMsg', 'CompilerErrors', 'IsRunTests', 'State', 'IsCheckOnly'];    
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['id']);
-    if (validator.error) return callback(new Error(validator.message), null);    
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/ContainerAsyncRequest/' + args.id;
+    opts.method = 'GET';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/ContainerAsyncRequest/' + args.id, 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, function(err, results) {
+    return this._apiRequest(opts, function(err, results) {
       if (err) { return callback(err, null); }
       if (!err) { return callback(null, _.pick(results, whitelistKeys)); }
     });        
@@ -255,44 +197,33 @@ module.exports = function(nforce, pluginName) {
 
   // inserts a new record
   plugin.fn('insert', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['type' , 'object']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null); 
 
-    var validator = validate.call(this, args, ['type' , 'object']);
-    if (validator.error) return callback(new Error(validator.message), null);    
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type;
+    opts.method = 'POST';
+    opts.body = JSON.stringify(args.object);
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/' + args.type, 
-      method: 'POST',
-      body: JSON.stringify(args.object)
-    }
-
-    this._apiBlobRequest(opts, this.oauth, function(err, results) {
-      if (err) { return callback(err, null); }
-      if (!err) { return callback(null, JSON.parse(results)); }
-    });   
+    return this._apiRequest(opts, opts.callback); 
 
   });     
 
   // updates an existing record
   plugin.fn('update', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id', 'type', 'object']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['id', 'type', 'object']);
-    if (validator.error) return callback(new Error(validator.message), null);    
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/' + args.id;
+    opts.method = 'PATCH';
+    opts.body = JSON.stringify(args.object);
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/' + args.type + '/' + args.id, 
-      method: 'PATCH',
-      body: JSON.stringify(args.object)
-    }
-
-    this._apiRequest(opts, this.oauth, null, function(err, results) {
+    this._apiRequest(opts, function(err, results) {
       if (err) { return callback(err, null); }
       if (!err) { return callback(null, {success: true}); }
     });       
@@ -301,20 +232,16 @@ module.exports = function(nforce, pluginName) {
 
   // deletes a record by id
   plugin.fn('delete', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id', 'type']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['id', 'type']);
-    if (validator.error) return callback(new Error(validator.message), null);    
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/sobjects/' + args.type + '/' + args.id;
+    opts.method = 'DELETE';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/sobjects/' + args.type + '/' + args.id, 
-      method: 'DELETE'
-    }
-
-    this._apiBlobRequest(opts, this.oauth, function(err, results) {
+    this._apiRequest(opts, function(err, results) {
       if (err) { return callback(err, null); }
       if (!err) { return callback(null, {success: true}); }
     });
@@ -322,58 +249,46 @@ module.exports = function(nforce, pluginName) {
   });     
 
   plugin.fn('query', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['q']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};    
-
-    var validator = validate.call(this, args, ['q']);
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/query?q=' + encodeURIComponent(args.q), 
-      method: 'GET'
-    }
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/query?q=' + encodeURIComponent(args.q);
+    opts.method = 'GET';
 
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });
 
   // executes a chunk of Apex code anonymously.
   plugin.fn('executeAnonymous', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['code']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['code']);
-    if (validator.error) return callback(new Error(validator.message), null);  
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
+        + '/tooling/executeAnonymous/?anonymousBody=' + encodeURIComponent(args.code);
+    opts.method = 'GET';
 
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
-        + '/tooling/executeAnonymous/?anonymousBody=' + encodeURIComponent(args.code), 
-      method: 'GET'
-    }
-
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });  
 
    // rreturns a raw debug log by ID.
   plugin.fn('getApexLog', function(args, callback) {
-    var opts;
+    var validator = validate(args, ['id']);
+    var opts = this._getOpts(args, callback);
 
-    if(!callback) callback = function(){};
+    if (validator.error) return callback(new Error(validator.message), null);
 
-    var validator = validate.call(this, args, ['id']);
-    if (validator.error) return callback(new Error(validator.message), null);  
-
-    opts = {
-      uri: this.oauth.instance_url + '/services/data' + this.apiVersion 
+    opts.uri = this.oauth.instance_url + '/services/data' + this.apiVersion 
         + '/tooling/sobjects/ApexLog/' + args.id + '/Body', 
-      method: 'GET'
-    }
+    opts.method = 'GET'
 
-    return this._apiRequest(opts, this.oauth, null, callback);
+    return this._apiRequest(opts, opts.callback);
 
   });    
 
@@ -394,21 +309,11 @@ module.exports = function(nforce, pluginName) {
 
   });     
 
-  // temp -- helper to get rid of boilerplate code. nforce will fix eventually
+  // utility method to validate inputs
   function validate(args, required) {
     var result = {
       error: false,
       message: 'No errors'
-    }
-
-    if (!this.apiVersion) {
-      result.error = true;
-      result.message = 'No API version specified';
-    }
-
-    if (!plugin.util.validateOAuth(args.oauth)) {
-      result.error = true;
-      result.message = 'Invalid oauth object argument';
     }
 
     // ensure required properties were passed in the arguments hash
@@ -420,16 +325,10 @@ module.exports = function(nforce, pluginName) {
           result.message = 'The following values must be passed: ' + required.join(', ');
         }
       })
-    }    
-
-    if(this.mode === 'single') {
-      var args = Array.prototype.slice.call(arguments);
-      oauth = this.oauth;
-      if(args.length === 2) callback = args[1];
-    }        
+    }          
 
     return result;
 
-  }
+  }  
   
 }
