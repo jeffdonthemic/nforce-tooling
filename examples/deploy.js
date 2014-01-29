@@ -8,7 +8,7 @@ var sfpass = process.env.SFPASS;
 // for the example, create a new class use the id here
 var apexClassId = 'YOUR-APEX-CLASS-ID';
 // the new code to update the class above with
-var newApexCode = "public class ToolingDemo {\n\n}";
+var newApexCode = "public class ToolingDemo {\n String s = '';\n}";
 // we need this so we can clean up after ourselves
 var metadataContainerId;
 
