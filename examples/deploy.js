@@ -6,7 +6,7 @@ var sfuser = process.env.SFUSER;
 var sfpass = process.env.SFPASS;
 
 // for the example, create a new class use the id here
-var apexClassId = '01pi0000004m8a8';
+var apexClassId = 'YOUR-APEX-CLASS-ID';
 // the new code to update the class above with
 var newApexCode = "public class ToolingDemo {\n\n}";
 // we need this so we can clean up after ourselves
