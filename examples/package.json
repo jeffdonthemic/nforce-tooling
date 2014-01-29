@@ -1,0 +1,11 @@
+{
+  "name": "nforce-tooling-examples",
+  "description": "Examples for nforce-tooling",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "nforce": "*",
+    "nforce-tooling": "*",
+    "q": "~1.0.0"
+  }
+}
