@@ -282,4 +282,5 @@ $ npm test
 
 ## Changelog
 
+* `v0.0.2`: Fixes for execAnon URL
 * `v0.0.1`: Initial release. CRUD, deployment
