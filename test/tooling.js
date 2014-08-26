@@ -65,6 +65,8 @@ describe('plugin', function() {
       var q = 'SELECT Id, Name FROM ApexClass Limit 1';
       org.tooling.query({q: q}, function(err, resp) {
         if (config.debug) console.log(resp);
+        // if there are no apex classes in the org, give a warning
+        if (resp.size == 0) console.log('Warning! There are no Apex classes in the Org. Tests will fail.');
         resp.size.should.eql(1);
         resp.records.should.be.instanceof(Array);      
         done();
@@ -72,8 +74,8 @@ describe('plugin', function() {
     })
   })    
 
-  describe('#executeAnonymous()', function(){
-    it('should return the results of execAnon successfully', function(done){
+  describe('#executeAnonymous() success', function(){
+    it('should return the results of a successful execAnon successfully', function(done){
       var code = "System.debug('hello world');";
       org.tooling.executeAnonymous({code: code}, function(err, resp) {
         if (config.debug) console.log(resp);
@@ -83,6 +85,19 @@ describe('plugin', function() {
       })
     })
   })  
+
+  describe('#executeAnonymous() failure', function(){
+    it('should return the results of a failed execAnon successfully', function(done){
+      var code = "BAD CODE";
+      org.tooling.executeAnonymous({code: code}, function(err, resp) {
+        if (config.debug) console.log(resp);
+        resp.compiled.should.eql(false);
+        resp.success.should.eql(false);
+        resp.compileProblem.should.not.be.null;
+        done();
+      })
+    })
+  })    
 
   describe('#getDescribe()', function(){
     it('should return a metadata object with a matching name', function(done){
@@ -118,6 +133,8 @@ describe('plugin', function() {
     it('should return the requested record', function(done){
       var q = 'SELECT Id, Name FROM ApexClass Limit 1';
       org.tooling.query({q: q}, function(err, resp) {
+        // if there are no apex classes in the org, give a warning
+        if (resp.size == 0) console.log('Warning! There are no Apex classes in the Org. Tests will fail.');
         var apexClassId = resp.records[0].Id;
         org.tooling.getRecord({id: apexClassId, type: 'ApexClass'}, function(err, resp) {  
           if (config.debug) console.log(resp);

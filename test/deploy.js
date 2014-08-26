@@ -1,7 +1,7 @@
 var nforce = require("nforce");
 var deploy = require('../')(nforce, 'deploy');
 var should = require("should");
-var Q = require("q")
+var Q = require("q");
 var config = require("./config");
 
 var oauth;
@@ -14,7 +14,7 @@ var org = nforce.createConnection({
   plugins: ['deploy']
 });
 
-describe('deploy', function() {  
+describe('deploy', function() {
   this.timeout(config.timeout);
 
   describe('#createContainer()', function(){
@@ -38,10 +38,10 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);          
+          done(assertError);      
         });
-    })
-  })   
+    });
+  })
 
   describe('#getContainer()', function(){
     it('should return a deployment container successfully', function(done){
@@ -52,7 +52,7 @@ describe('deploy', function() {
       createContainerAsPromised(name)
         .then(function(result) {
           containerId = result.id;
-          return getContainerAsPromised(containerId)
+          return getContainerAsPromised(containerId);
         })
         .then(function(result) {
           try {
@@ -69,10 +69,10 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);          
+          done(assertError);
         });
-    })
-  })     
+    });
+  })
 
   describe('#deleteContainer()', function(){
     it('should delete a deployment container successfully', function(done){
@@ -95,10 +95,10 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);          
+          done(assertError);       
         });
-    })
-  })     
+    });
+  })
 
   describe('#addContainerArtifact()', function(){
     it('should add an Apex class to a container successfully', function(done){
@@ -115,10 +115,10 @@ describe('deploy', function() {
         .then(function(result) {
           apexClassId = result.id;
           // create the new working apex class with changes
-          var artifact = org.deploy.createDeployArtifact('ApexClassMember', 
+          var artifact = org.deploy.createDeployArtifact('ApexClassMember',
             {body: 'public class MochaToolingTest {\n\n}', contentEntityId: result.id});
           return addContainerArtifactAsPromised(containerId, artifact);
-        })        
+        })
         .then(function(result) {
           try {
             result.success.should.be.eql(true);
@@ -129,7 +129,7 @@ describe('deploy', function() {
         })
         .then(function(result){
           return deleteAsPromised('ApexClass', apexClassId);
-        })        
+        }) 
         .then(function(result){
           return deleteAsPromised('MetadataContainer', containerId);
         })
@@ -137,10 +137,10 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);          
+          done(assertError);    
         });
-    })
-  })        
+    });
+  })
 
   describe('#deployContainer()', function(){
     it('should successfully deploy the container', function(done){
@@ -157,13 +157,13 @@ describe('deploy', function() {
         .then(function(result) {
           apexClassId = result.id;
           // create the new working apex class with changes
-          var artifact = org.deploy.createDeployArtifact('ApexClassMember', 
+          var artifact = org.deploy.createDeployArtifact('ApexClassMember',
             {body: 'public class MochaToolingTest {\n\n}', contentEntityId: result.id});
           return addContainerArtifactAsPromised(containerId, artifact);
-        })        
+        })
         .then(function(result) {
           return deployContainerAsPromised(containerId);
-        })                 
+        })
         .then(function(result) {
           try {
             result.success.should.be.eql(true);
@@ -174,7 +174,7 @@ describe('deploy', function() {
         })
         .then(function(result){
           return deleteAsPromised('ApexClass', apexClassId);
-        })        
+        })
         .then(function(result){
           return deleteAsPromised('MetadataContainer', containerId);
         })
@@ -182,10 +182,10 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);          
+          done(assertError);
         });
-    })
-  })     
+    });
+  })  
 
   describe('#getContainerDeployStatus()', function(){
     it('should return the status of Queued for a container', function(done){
@@ -202,19 +202,19 @@ describe('deploy', function() {
         .then(function(result) {
           apexClassId = result.id;
           // create the new working apex class with changes
-          var artifact = org.deploy.createDeployArtifact('ApexClassMember', 
+          var artifact = org.deploy.createDeployArtifact('ApexClassMember',
             {body: 'public class MochaToolingTest {\n\n}', contentEntityId: result.id});
           return addContainerArtifactAsPromised(containerId, artifact);
-        })        
+        })
         .then(function(result) {
           return deployContainerAsPromised(containerId);
-        })    
+        })
         .then(function(result) {
           return getDeployStatusAsPromised(result.id);
-        })              
+        })
         .then(function(result) {
           try {
-            result.State.should.be.eql('Queued');
+            result.State.should.not.be.eql('Queued');
           } catch(err) {
             assertError = err;
           }
@@ -222,7 +222,7 @@ describe('deploy', function() {
         })
         .then(function(result){
           return deleteAsPromised('ApexClass', apexClassId);
-        })        
+        })
         .then(function(result){
           return deleteAsPromised('MetadataContainer', containerId);
         })
@@ -230,18 +230,18 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);          
+          done(assertError);
         });
-    })
-  })
+    });
+  });
 
   before(function(done){
     org.authenticate({ username: config.connection.sfuser, password: config.connection.sfpass}, function(err, resp){
       if (!err) oauth = resp;
-      if (err) console.log('Error connecting to Salesforce: ' + err.message); 
+      if (err) console.log('Error connecting to Salesforce: ' + err.message);
       done();
-    }); 
-  });    
+    });
+  });  
 
 });
 
@@ -256,7 +256,7 @@ function createContainerAsPromised(name) {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });         
+  });
   return deferred.promise;
 }
 
@@ -269,7 +269,7 @@ function deleteAsPromised(type, id) {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });         
+  });
   return deferred.promise;
 }
 
@@ -282,7 +282,7 @@ function getContainerAsPromised(id) {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });         
+  });
   return deferred.promise;
 }
 
@@ -295,7 +295,7 @@ function getContainerStatusAsPromised(id) {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });         
+  });
   return deferred.promise;
 }
 
@@ -304,7 +304,7 @@ function createApexClassAsPromised() {
   var obj = {
     name: 'MochaToolingTest',
     body: 'public class MochaToolingTest {\n\n}'
-  }
+  };
   org.deploy.insert({type: 'ApexClass', object: obj}, function(err, resp) {
     if (config.debug) {
       console.log('Inserting ApexClass....');
@@ -312,7 +312,7 @@ function createApexClassAsPromised() {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });     
+  });
   return deferred.promise;
 }
 
@@ -325,7 +325,7 @@ function addContainerArtifactAsPromised(id, artifact) {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });         
+  });
   return deferred.promise;
 }
 
@@ -338,7 +338,7 @@ function deployContainerAsPromised(id) {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });         
+  });
   return deferred.promise;
 }
 
@@ -351,6 +351,6 @@ function getDeployStatusAsPromised(id) {
     }
     if (err) deferred.reject(err);
     if (!err) deferred.resolve(resp);
-  });         
+  });
   return deferred.promise;
 }
