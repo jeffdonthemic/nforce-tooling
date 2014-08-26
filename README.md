@@ -265,7 +265,7 @@ Helper function that creates an *artifact* object to add to a container.
 The mocha tests currently run directly against a Saleforce org. I would like to switch them to use [nock](https://github.com/pgte/nock) in the near future. To run the tests, first you'll need to rename test/config-example.js to test/config.js and enter your connection parameters. Then run the tests.
 
 ```bash
-$ mocha
+$ npm test
 ```
 
 ## Todo
@@ -278,6 +278,7 @@ $ mocha
 
 * Jeff Douglas -> [jeffdonthemic](https://github.com/jeffdonthemic)
 * Kevin O'Hara -> [kevinohara80](https://github.com/kevinohara80)
+* Eoin O'Neill -> [thegogz](https://github.com/thegogz)
 
 ## Changelog
 
