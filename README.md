@@ -183,6 +183,16 @@ Returns a raw debug log.
 
 * `id`: Required. The ID of the debug log.
 
+### getApexClassOrTriggerCoverage()
+
+Returns code coverage informaion for the specified Apex class or Trigger. Ensure that tests have been run for the class or trigger so that test coverage data is populated.
+
+* `name`: Required. The name of the Apex class or Trigger.
+
+### getApexOrgWideCoverage()
+
+Returns the Org wide test code coverage for all Apex classes and Triggers.
+
 ### createContainer()
 
 Creates a container as a package for your workspace that manages working copies of Tooling objects, including collections of objects that should be deployed together. 

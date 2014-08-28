@@ -25,5 +25,7 @@ config.connection.redirectUri = 'http://localhost:3000/oauth/_callback';
 config.records.custsomFieldId;
 // to run tests for getApexLog, enter the ID of a log from the Debug Logs page
 config.records.apexLogId;
+// to run tests for getApexClassOrTriggerCoverage, enter the name of an Apex class or trigger
+config.records.apexClassOrTriggerName;
 
 module.exports = config;
