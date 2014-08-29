@@ -3,6 +3,7 @@ var deploy = require('../')(nforce, 'deploy');
 var should = require("should");
 var Q = require("q");
 var config = require("./config");
+var record = require("./record");
 
 var oauth;
 
@@ -16,6 +17,8 @@ var org = nforce.createConnection({
 
 describe('deploy', function() {
   this.timeout(config.timeout);
+  var recorder = record('deploy_mocks');
+  before(recorder.before);
 
   describe('#createContainer()', function(){
     it('should create a new deployment container successfully', function(done){
@@ -38,7 +41,7 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);      
+          done(assertError);
         });
     });
   })
@@ -95,7 +98,7 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);       
+          done(assertError);
         });
     });
   })
@@ -129,7 +132,7 @@ describe('deploy', function() {
         })
         .then(function(result){
           return deleteAsPromised('ApexClass', apexClassId);
-        }) 
+        })
         .then(function(result){
           return deleteAsPromised('MetadataContainer', containerId);
         })
@@ -137,7 +140,7 @@ describe('deploy', function() {
           console.log(err);
         })
         .fin(function(result) {
-          done(assertError);    
+          done(assertError);
         });
     });
   })
@@ -185,7 +188,7 @@ describe('deploy', function() {
           done(assertError);
         });
     });
-  })  
+  })
 
   describe('#getContainerDeployStatus()', function(){
     it('should return the status of Queued for a container', function(done){
@@ -241,8 +244,8 @@ describe('deploy', function() {
       if (err) console.log('Error connecting to Salesforce: ' + err.message);
       done();
     });
-  });  
-
+  });
+  after(recorder.after);
 });
 
 // promise functions that do the actual work

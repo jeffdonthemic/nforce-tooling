@@ -17,5 +17,3 @@ npm-debug.log
 node_modules
 
 env.sh
-
-test/config.js
