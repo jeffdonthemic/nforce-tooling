@@ -2,6 +2,7 @@ var nforce = require("nforce");
 var tooling = require('../')(nforce);
 var should = require("should");
 var config = require("./config");
+var record = require("./record");
 
 var oauth;
 
@@ -13,22 +14,25 @@ var org = nforce.createConnection({
   plugins: ['tooling']
 });
 
-describe('plugin', function() {  
+describe('plugin', function() {
+  this.timeout(config.timeout);
+  var recorder = record('tooling_mocks');
+  before(recorder.before);
 
   describe('#insert()', function(){
     it('should create a new MetadataContainer record successfully', function(done){
       org.tooling.insert({type: 'MetadataContainer', object: {name: 'TestInsertContainer'}}, function(err, resp) {
         if (err) console.log(err);
         if (config.debug) console.log(resp);
-        resp.success.should.eql(true);  
+        resp.success.should.eql(true);
         // delete the record we just inserted
         org.tooling.delete({type: 'MetadataContainer', id: resp.id}, function(err, resp) {
-          if (err) console.log('Could not delete MetadataContainer ' + resp.id + ': ' + err.message); 
+          if (err) console.log('Could not delete MetadataContainer ' + resp.id + ': ' + err.message);
           done();
-        }); 
+        });
       });
     })
-  })    
+  })
 
   describe('#update()', function(){
     it('should update a MetadataContainer record successfully', function(done){
@@ -38,16 +42,16 @@ describe('plugin', function() {
         // update the record we just inserted
         var containerId = resp.id;
         org.tooling.update({type: 'MetadataContainer', id: containerId, object: { name: 'TestUpdateContainerModified' }}, function(err, resp) {
-          resp.success.should.eql(true);  
+          resp.success.should.eql(true);
           // delete the record we just inserted
           org.tooling.delete({type: 'MetadataContainer', id: containerId}, function(err, resp) {
-            if (err) console.log('Could not delete MetadataContainer ' + containerId + ': ' + err.message); 
+            if (err) console.log('Could not delete MetadataContainer ' + containerId + ': ' + err.message);
             done();
-          }); 
+          });
         });
       });
     })
-  })   
+  })
 
   describe('#delete()', function(){
     it('should delete a MetadataContainer record successfully', function(done){
@@ -56,12 +60,12 @@ describe('plugin', function() {
         if (config.debug) console.log(resp);
         // delete the record we just inserted
         org.tooling.delete({type: 'MetadataContainer', id: resp.id}, function(err, resp) {
-          resp.success.should.eql(true);  
+          resp.success.should.eql(true);
           done();
-        }); 
+        });
       });
     })
-  })      
+  })
 
   describe('#query()', function(){
     it('should return an array of 1 record', function(done){
@@ -72,11 +76,11 @@ describe('plugin', function() {
         // if there are no apex classes in the org, give a warning
         if (resp.size == 0) console.log('Warning! There are no Apex classes in the Org. Tests will fail.');
         resp.size.should.eql(1);
-        resp.records.should.be.instanceof(Array);      
+        resp.records.should.be.instanceof(Array);
         done();
       })
     })
-  })    
+  })
 
   describe('#executeAnonymous() success', function(){
     it('should return the results of a successful execAnon successfully', function(done){
@@ -89,7 +93,7 @@ describe('plugin', function() {
         done();
       })
     })
-  })  
+  })
 
   describe('#executeAnonymous() failure', function(){
     it('should return the results of a failed execAnon successfully', function(done){
@@ -103,7 +107,7 @@ describe('plugin', function() {
         done();
       })
     })
-  })    
+  })
 
   describe('#getDescribe()', function(){
     it('should return a metadata object with a matching name', function(done){
@@ -151,9 +155,9 @@ describe('plugin', function() {
           resp.Id.should.eql(apexClassId);
           done();
         });
-      })      
+      })
     })
-  })  
+  })
 
   describe('#getCustomField()', function(){
     if (config.records.custsomFieldId) {
@@ -167,8 +171,8 @@ describe('plugin', function() {
       })
     } else {
       it('should not test successfully. Please enter the ID of a custom field from a custom object into config.js')
-    }    
-  }) 
+    }
+  })
 
   describe('#getApexLog()', function(){
     if (config.records.apexLogId) {
@@ -182,23 +186,23 @@ describe('plugin', function() {
       })
     } else {
       it('should not test successfully. Please enter the ID of Apex Log file into config.js')
-    }    
-  })   
+    }
+  })
 
   describe('#apexOrgWideCoverage()', function(){
     it('should return a number between 0 and 100', function(done){
       org.tooling.getApexOrgWideCoverage(function(err, resp) {
         if (err) console.log(err);
-        if (config.debug) console.log(resp); 
-        resp.should.be.within(0, 100);   
+        if (config.debug) console.log(resp);
+        resp.should.be.within(0, 100);
         done();
       })
     })
-  })  
+  })
 
-  describe.only('#getApexClassOrTriggerCoverage()', function(){
+  describe('#getApexClassOrTriggerCoverage()', function(){
     if (config.records.apexClassOrTriggerName) {
-      it('should return the propert test coverage', function(done){
+      it('should return the proper test coverage', function(done){
         org.tooling.getApexClassOrTriggerCoverage({name: config.records.apexClassOrTriggerName}, function(err, resp) {
           if (err) console.log(err);
           if (config.debug) console.log(resp);
@@ -213,15 +217,16 @@ describe('plugin', function() {
       })
     } else {
       it('should not test successfully. Please enter the name of the Apex class or Trigger into config.js')
-    }        
-  })       
+    }
+  })
 
   before(function(done){
     org.authenticate({ username: config.connection.sfuser, password: config.connection.sfpass}, function(err, resp){
       if (!err) oauth = resp;
-      if (err) console.log('Error connecting to Salesforce: ' + err.message); 
+      if (err) console.log('Error connecting to Salesforce: ' + err.message);
       done();
-    }); 
-  });    
- 
+    });
+  });
+
+  after(recorder.after);
 });

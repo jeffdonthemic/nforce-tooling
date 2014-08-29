@@ -9,7 +9,7 @@ nforce-tooling
 * CRUD, query, describe
 * Deployment
 
-See the [Force.com Tooling API Developer's Guide](http://www.salesforce.com/us/developer/docs/api_tooling/index.htm) for complete and official documentation. 
+See the [Force.com Tooling API Developer's Guide](http://www.salesforce.com/us/developer/docs/api_tooling/index.htm) for complete and official documentation.
 
 **Note**: Not all Tooling API functionality is available via the REST API. #sadtrombone
 
@@ -59,7 +59,7 @@ org.authenticate({ username: 'my_test@gmail.com', password: 'mypassword'}, funct
 });
 ```
 
-See the [nforce readme](https://github.com/kevinohara80/nforce) for more detailed instruction on the awesome features of nforce. 
+See the [nforce readme](https://github.com/kevinohara80/nforce) for more detailed instruction on the awesome features of nforce.
 
 ## nforce-tooling API Basics
 
@@ -75,7 +75,7 @@ callback(err, resp);
 
 API calls take two arguments:
 
-  1. A JavaScript object containing the data for the function  
+  1. A JavaScript object containing the data for the function
   2. The callback
 
 ```js
@@ -86,7 +86,7 @@ var data = {
 org.tooling.insert({type: 'ApexClass', object: data}, function(err, resp) {
   if (!err) console.log(resp);
   if (err) console.log(err);
-}); 
+});
 ```
 
 If you are using multi-user mode, pass the connection info in the hash with the `oauth` property.
@@ -99,7 +99,7 @@ var data = {
 org.tooling.insert({type: 'ApexClass', object: data, oauth: oauth}, function(err, resp) {
   if (!err) console.log(resp);
   if (err) console.log(err);
-}); 
+});
 ```
 
 ### Deploying Changes
@@ -115,37 +115,37 @@ Deploying changes to your org with `nforce-tooling` has simple workflow but due 
 
 ### getObjects()
 
-Returns a collection of available Tooling API objects and their metadata. 
+Returns a collection of available Tooling API objects and their metadata.
 
 
 ### getObject()
 
-Returns the individual metadata for a specified object. 
+Returns the individual metadata for a specified object.
 
 * `name`: Required. The name of the object (e.g., MetadataContainer, ApexClass)
 
 ### getRecord()
 
-Returns high-level metadata for a specific object. For more detailed metadata, use `getDescribe()`. 
+Returns high-level metadata for a specific object. For more detailed metadata, use `getDescribe()`.
 
 * `id`: Required. The ID of the object.
 * `type`: Required. The type of object (e.g., ApexClass, ApexTrigger).
 
 ### getDescribe()
 
-Returns detailed metadata at all levels for a specified object. 
+Returns detailed metadata at all levels for a specified object.
 
 * `type`: Required. The type of object to describe (e.g., ApexClass, ApexTrigger).
 
 ### getCustomField()
 
-Returns the metadata on a custom field for a custom object. Includes access to the associated CustomField object in Salesforce Metadata API. 
+Returns the metadata on a custom field for a custom object. Includes access to the associated CustomField object in Salesforce Metadata API.
 
 * `id`: Required. The ID of the custom field.
 
 ### query()
 
-Executes a query against a Tooling API object and returns data that matches the specified criteria. 
+Executes a query against a Tooling API object and returns data that matches the specified criteria.
 
 * `q`: Required. The query to execute (e.g., `SELECT Id, Name FROM ApexClass`)
 
@@ -195,19 +195,19 @@ Returns the Org wide test code coverage for all Apex classes and Triggers.
 
 ### createContainer()
 
-Creates a container as a package for your workspace that manages working copies of Tooling objects, including collections of objects that should be deployed together. 
+Creates a container as a package for your workspace that manages working copies of Tooling objects, including collections of objects that should be deployed together.
 
 * `name`: Required. The name of the container.
 
 ### deleteContainer()
 
-Deletes a container. 
+Deletes a container.
 
 * `id`: Required. The ID of the container.
 
 ### getContainer()
 
-Returns the container. 
+Returns the container.
 
 * `id`: Required. The ID of the container.
 
@@ -238,7 +238,7 @@ Compiles and deploys a container.
 
 ### getContainerDeployStatus()
 
-Returns the deploy status of a container. 
+Returns the deploy status of a container.
 
 * `id`: Required. The ID of the container.
 
@@ -253,7 +253,7 @@ Valid states are:
 
 ### createDeployArtifact()
 
-Helper function that creates an *artifact* object to add to a container. 
+Helper function that creates an *artifact* object to add to a container.
 
 * `type`: Required. The type of artifact (e.g., ApexClassMember, ApexPageMember)
 * `fields`: Optional. A JavaScript object containing any values that will populate the returned artifact object.
@@ -272,7 +272,9 @@ Helper function that creates an *artifact* object to add to a container.
 
 ## Running Tests
 
-The mocha tests currently run directly against a Saleforce org. I would like to switch them to use [nock](https://github.com/pgte/nock) in the near future. To run the tests, first you'll need to rename test/config-example.js to test/config.js and enter your connection parameters. Then run the tests.
+The mocha tests have been updated to use [nock](https://github.com/pgte/nock) and the record.js utility as described over in the [Orchestrate Blog](http://orchestrate.io/blog/2014/06/13/how-to-test-code-that-uses-http-apis-using-node-js-mocha-and-nock/)
+
+**NOTE**: If you wish to rebuild these you have to run each test file individually and record you then need to modify the mocks so they don't contain anything sensetive (your username and password will be in the login call...)
 
 ```bash
 $ npm test
@@ -281,7 +283,6 @@ $ npm test
 ## Todo
 
 * Implement ApexExecutionOverlayAction functionality.
-* Rewrite tests using nock.
 * Hook up to travis-ci.org
 
 ## Contributors
