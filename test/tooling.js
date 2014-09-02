@@ -196,7 +196,7 @@ describe('plugin', function() {
     })
   })  
 
-  describe.only('#getApexClassOrTriggerCoverage()', function(){
+  describe('#getApexClassOrTriggerCoverage()', function(){
     if (config.records.apexClassOrTriggerName) {
       it('should return the propert test coverage', function(done){
         org.tooling.getApexClassOrTriggerCoverage({name: config.records.apexClassOrTriggerName}, function(err, resp) {
@@ -214,7 +214,7 @@ describe('plugin', function() {
     } else {
       it('should not test successfully. Please enter the name of the Apex class or Trigger into config.js')
     }        
-  })       
+  })   
 
   before(function(done){
     org.authenticate({ username: config.connection.sfuser, password: config.connection.sfpass}, function(err, resp){

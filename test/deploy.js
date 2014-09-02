@@ -214,7 +214,7 @@ describe('deploy', function() {
         })
         .then(function(result) {
           try {
-            result.State.should.not.be.eql('Queued');
+            result.State.should.not.be.null;
           } catch(err) {
             assertError = err;
           }

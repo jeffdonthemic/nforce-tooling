@@ -338,6 +338,59 @@ module.exports = function(nforce, pluginName) {
       }
     });      
 
+  });
+
+  // runs specified test synchronously
+  plugin.fn('runTestsAsync', function(args, callback) {
+    var validator = validate(args, ['ids']);
+    var opts = this._getOpts(args, callback);
+
+    if (validator.error) return callback(new Error(validator.message), null);
+
+    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+        + '/tooling/runTestsAsynchronous/?classids=' + args.ids,
+    opts.method = 'GET';
+
+    this._apiRequest(opts, function(err, results) {
+      if (err) { return callback(err, null); }
+      if (!err) { return callback(null, results); }
+    });
+
+  });
+
+  // checks the run tests status of a specific job 
+  plugin.fn('getAsyncTestStatus', function(args, callback) {
+    var validator = validate(args, ['id']);
+    var opts = this._getOpts(args, callback);
+    var q = "select Id, Status, ApexClassId FROM ApexTestQueueItem where ParentJobId = '"+args.id+"'";
+
+    if (validator.error) return callback(new Error(validator.message), null);
+
+    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+        + '/tooling/query?q=' + encodeURIComponent(q);
+    opts.method = 'GET';
+
+    return this._apiRequest(opts, opts.callback);
+
+  });
+
+  // returned the results of all runTests
+  plugin.fn('getAsyncTestResults', function(args, callback) {
+    var validator = validate(args, ['ids']);
+    // enclose each id with a single quote for sql
+    var sqlIds = "'" + args.ids.join("','") + "'";
+    var opts = this._getOpts(args, callback);
+    var q = "select StackTrace, Message, AsyncApexJobId, MethodName, Outcome, ApexClass.Id, ApexClass.Name ";
+    q += "from ApexTestResult where QueueItemId IN ("+sqlIds+")";
+
+    if (validator.error) return callback(new Error(validator.message), null);
+
+    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+        + '/tooling/query?q=' + encodeURIComponent(q);
+    opts.method = 'GET';
+
+    return this._apiRequest(opts, opts.callback);
+
   });  
 
   // factory to create an empty deployment artifact

@@ -111,6 +111,10 @@ Deploying changes to your org with `nforce-tooling` has simple workflow but due 
 3. Deploy the container to your org with `deployContainer()`. This will return an ID for the ContainerAsyncRequest created for the deployment.
 4. Check the status of the deployment by calling `getContainerDeployStatus()` with the ID of the ContainerAsyncRequest. Keeping checking the status until is it other that 'Queued'.
 
+### Running Salesforce Unit Tests
+
+The current version of the **nforce-tooling** only supports running Salesforce tests asynchronously. See `/examples/runTests.js` and `/tests/runTests.js` for sample code. 
+
 ## nforce-tooling Methods
 
 ### getObjects()
@@ -193,6 +197,24 @@ Returns code coverage informaion for the specified Apex class or Trigger. Ensure
 
 Returns the Org wide test code coverage for all Apex classes and Triggers.
 
+### runTestsAsync()
+
+Executes test for the specified test classes.
+
+* `ids`: Required. The IDs of the test classes to run.
+
+### getAsyncTestStatus()
+
+Returns the status for all ApexTestQueueItems in the job.
+
+* `jobId`: Required. The ID of the job that contains all of the tests to be run.
+
+### getAsyncTestResults()
+
+Returns the outcome of the test(s).
+
+* `ids`: Required. The comma separated list of ApexTestQueueItem IDs.
+
 ### createContainer()
 
 Creates a container as a package for your workspace that manages working copies of Tooling objects, including collections of objects that should be deployed together. 
@@ -272,7 +294,7 @@ Helper function that creates an *artifact* object to add to a container.
 
 ## Running Tests
 
-The mocha tests currently run directly against a Saleforce org. I would like to switch them to use [nock](https://github.com/pgte/nock) in the near future. To run the tests, first you'll need to rename test/config-example.js to test/config.js and enter your connection parameters. Then run the tests.
+The mocha tests currently run directly against a Saleforce org. I would like to switch them to use [nock](https://github.com/pgte/nock) in the near future. To run the tests, first you'll need to rename `test/config-example.js` to `test/config.js` and enter your connection parameters. Then run the tests.
 
 ```bash
 $ npm test
@@ -292,5 +314,6 @@ $ npm test
 
 ## Changelog
 
+* `v0.0.3`: Added support for runTestsAsynchronous
 * `v0.0.2`: Fixes for execAnon URL
 * `v0.0.1`: Initial release. CRUD, deployment
