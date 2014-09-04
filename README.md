@@ -314,6 +314,7 @@ $ npm test
 
 ## Changelog
 
+* `v0.0.4`: Fixed bug for multi mode
 * `v0.0.3`: Added support for runTestsAsynchronous
 * `v0.0.2`: Fixes for execAnon URL
 * `v0.0.1`: Initial release. CRUD, deployment
