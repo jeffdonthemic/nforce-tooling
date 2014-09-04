@@ -4,8 +4,6 @@ var should = require("should");
 var Q = require("q");
 var config = require("./config");
 
-var oauth;
-
 var org = nforce.createConnection({
   clientId: config.connection.clientId,
   clientSecret: config.connection.clientSecret,
@@ -237,7 +235,6 @@ describe('deploy', function() {
 
   before(function(done){
     org.authenticate({ username: config.connection.sfuser, password: config.connection.sfpass}, function(err, resp){
-      if (!err) oauth = resp;
       if (err) console.log('Error connecting to Salesforce: ' + err.message);
       done();
     });

@@ -5,7 +5,6 @@ var Q = require("q");
 var _ = require('lodash');
 var config = require("./config");
 
-var oauth;
 var metadataContainerId;
 var allApexClassIds = [];
 var apexTestClassId;
@@ -60,8 +59,6 @@ describe('runTests', function() {
   before(function(done){
     org.authenticate({ username: config.connection.sfuser, password: config.connection.sfpass}, function(err, resp){
 			if (!err) {
-				oauth = resp;
-
         // insert the apex class
         var apexClass = { 
           name: "ToolingApiMocha",
