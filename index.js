@@ -14,7 +14,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/' + args.type + '/' + args.id;
     opts.method = 'GET';
 
@@ -29,7 +29,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/' + args.type + '/describe';
     opts.method = 'GET';
 
@@ -44,7 +44,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/CustomField/' + args.id;
     opts.method = 'GET';
 
@@ -59,7 +59,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/' + args.type;
     opts.method = 'GET';
 
@@ -71,7 +71,7 @@ module.exports = function(nforce, pluginName) {
   plugin.fn('getObjects', function(args, callback) {
     var opts = this._getOpts(args, callback);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/';
     opts.method = 'GET';
 
@@ -86,7 +86,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/MetadataContainer';
     opts.method = 'POST';
     opts.body = JSON.stringify({name: args.name});
@@ -102,7 +102,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/MetadataContainer/' + args.id;
     opts.method = 'GET';
 
@@ -128,7 +128,7 @@ module.exports = function(nforce, pluginName) {
       }
     });
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/' + args.artifact.type;
     opts.method = 'POST'
     opts.body = JSON.stringify(body);
@@ -144,7 +144,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/MetadataContainer/' + args.id;
     opts.method = 'DELETE';
 
@@ -166,7 +166,7 @@ module.exports = function(nforce, pluginName) {
     // look for passed argements
     if (!_.isUndefined(args.isCheckOnly)) body.isCheckOnly = args.isCheckOnly;
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/ContainerAsyncRequest';
     opts.method = 'POST';
     opts.body = JSON.stringify(body);
@@ -184,7 +184,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/ContainerAsyncRequest/' + args.id;
     opts.method = 'GET';
 
@@ -202,7 +202,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/' + args.type;
     opts.method = 'POST';
     opts.body = JSON.stringify(args.object);
@@ -218,7 +218,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/' + args.type + '/' + args.id;
     opts.method = 'PATCH';
     opts.body = JSON.stringify(args.object);
@@ -237,7 +237,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/' + args.type + '/' + args.id;
     opts.method = 'DELETE';
 
@@ -254,7 +254,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/query?q=' + encodeURIComponent(args.q);
     opts.method = 'GET';
 
@@ -269,7 +269,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/executeAnonymous/?anonymousBody=' + encodeURIComponent(args.code);
     opts.method = 'GET';
 
@@ -284,7 +284,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/sobjects/ApexLog/' + args.id + '/Body',
     opts.method = 'GET'
 
@@ -297,7 +297,7 @@ module.exports = function(nforce, pluginName) {
     var q = 'select PercentCovered from ApexOrgWideCoverage';
     var opts = this._getOpts(callback);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/query?q=' + encodeURIComponent(q);
     opts.method = 'GET';
 
@@ -318,7 +318,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/query?q=' + encodeURIComponent(q);
     opts.method = 'GET';
 
@@ -347,7 +347,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/runTestsAsynchronous/?classids=' + args.ids,
     opts.method = 'GET';
 
@@ -366,7 +366,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/query?q=' + encodeURIComponent(q);
     opts.method = 'GET';
 
@@ -385,7 +385,7 @@ module.exports = function(nforce, pluginName) {
 
     if (validator.error) return callback(new Error(validator.message), null);
 
-    opts.uri = this.oauth.instance_url + '/services/data/' + this.apiVersion
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/query?q=' + encodeURIComponent(q);
     opts.method = 'GET';
 
