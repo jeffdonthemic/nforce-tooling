@@ -357,6 +357,25 @@ module.exports = function(nforce, pluginName) {
     });
 
   });
+  
+  // runs specified test synchronously with post
+  plugin.fn('runTestsAsyncPost', function(args, callback) {
+    var validator = validate(args, ['ids']);
+    var opts = this._getOpts(args, callback);
+
+    if (validator.error) return callback(new Error(validator.message), null);
+
+    opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
+        + '/tooling/runTestsAsynchronous/',
+    opts.method = 'POST';
+    opts.body = '{"classids":"' + args.ids + '"}';
+
+    this._apiRequest(opts, function(err, results) {
+      if (err) { return callback(err, null); }
+      if (!err) { return callback(null, results); }
+    });
+
+  });
 
   // checks the run tests status of a specific job 
   plugin.fn('getAsyncTestStatus', function(args, callback) {
