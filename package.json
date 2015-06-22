@@ -12,6 +12,7 @@
   },
   "keywords": [
     "nforce",
+    "nforce-plugin",
     "salesforce",
     "tooling",
     "forcedotcom"
@@ -24,6 +25,9 @@
   "homepage": "https://github.com/jeffdonthemic/nforce-tooling",
   "dependencies": {
     "lodash": "~2.4.1"
+  },
+  "peerDependencies": {
+    "nforce": ">= 0.8.0"
   },
   "devDependencies": {
     "nforce": "*",
