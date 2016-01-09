@@ -178,8 +178,6 @@ module.exports = function(nforce, pluginName) {
   // checks the current status of a deployment
   plugin.fn('getContainerDeployStatus', function(args, callback) {
     var validator = validate(args, ['id']);
-    // specify the properties to be returned from salesforce
-    var whitelistKeys = ['Id', 'MetadataContainerId', 'ErrorMsg', 'CompilerErrors', 'IsRunTests', 'State', 'IsCheckOnly'];
     var opts = this._getOpts(args, callback);
 
     if (validator.error) return callback(new Error(validator.message), null);
@@ -188,11 +186,8 @@ module.exports = function(nforce, pluginName) {
         + '/tooling/sobjects/ContainerAsyncRequest/' + args.id;
     opts.method = 'GET';
 
-    return this._apiRequest(opts, function(err, results) {
-      if (err) { return callback(err, null); }
-      if (!err) { return callback(null, _.pick(results, whitelistKeys)); }
-    });
-
+    return this._apiRequest(opts, opts.callback);
+    
   });
 
   // inserts a new record
