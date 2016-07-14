@@ -363,7 +363,23 @@ module.exports = function(nforce, pluginName) {
     opts.uri = opts.oauth.instance_url + '/services/data/' + this.apiVersion
         + '/tooling/runTestsAsynchronous/',
     opts.method = 'POST';
-    opts.body = '{"classids":"' + args.ids + '"}';
+    if(!args.methods){
+      opts.body = '{"classids":"' + args.ids + '"}';  
+    }
+    else{
+      validator = false;
+
+      var invalid = _.find(args.methods, function(item){
+        var valid = validate(item, ['classId']);
+        if(valid.error) validator = valid;
+        return valid;
+      });
+
+      if(validator.error) return callback(new Error(validator.message));
+
+      opts.body = JSON.stringify({tests: args.methods})
+    }
+    
 
     this._apiRequest(opts, function(err, results) {
       if (err) { return callback(err, null); }
