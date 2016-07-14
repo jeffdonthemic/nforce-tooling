@@ -42,6 +42,41 @@ describe('runTests', function() {
             function () {
               org.toolingTests.getAsyncTestResults({ids: [resp.records[0].Id]}, function(err, resp) {
                 if (err) console.log(err);
+                resp.size.should.eql(2);
+                resp.totalSize.should.eql(2);
+                resp.records.should.be.instanceof(Array);
+                resp.records[0].Outcome.should.eql("Pass");
+                done();
+              });
+            }
+          , 5000);
+        });
+      });
+    })
+  });
+
+  describe('#runTestsAsyncSpecificPost', function(done){
+    it('should return test results correctly for the specified tests', function(done){
+      // kick off the job
+      org.toolingTests.runTestsAsyncPost({ids: apexTestClassId, methods: [{classId: apexTestClassId, testMethods:['assertNotName']}]}, function(err, jobId) {
+        if (err) console.log(err);
+        jobId.should.not.be.null;
+        // get the test status
+        org.toolingTests.getAsyncTestStatus({id: jobId}, function(err, resp) {
+          if (err) console.log(err);
+          resp.size.should.eql(1);
+          resp.totalSize.should.eql(1);
+          resp.records.should.be.instanceof(Array);
+          resp.records[0].Id.should.not.be.null;
+          resp.records[0].Status.should.not.be.null;
+          resp.records[0].ApexClassId.should.not.be.null;
+
+          // wait 5 seconds and then get the test results
+          console.log("     Info: Waiting 5 seconds for salesforce tests to finish.");
+          setTimeout(
+            function () {
+              org.toolingTests.getAsyncTestResults({ids: [resp.records[0].Id]}, function(err, resp) {
+                if (err) console.log(err);
                 resp.size.should.eql(1);
                 resp.totalSize.should.eql(1);
                 resp.records.should.be.instanceof(Array);
@@ -53,7 +88,42 @@ describe('runTests', function() {
         });
       });
     })
-  });  
+  })
+
+  describe('#runTestsAsyncPost', function(done){
+    it('should return test results correctly for the test ids using POST', function(done){
+      // kick off the job
+      org.toolingTests.runTestsAsyncPost({ids: apexTestClassId}, function(err, jobId) {
+        if (err) console.log(err);
+        jobId.should.not.be.null;
+        // get the test status
+        org.toolingTests.getAsyncTestStatus({id: jobId}, function(err, resp) {
+          if (err) console.log(err);
+          resp.size.should.eql(1);
+          resp.totalSize.should.eql(1);
+          resp.records.should.be.instanceof(Array);
+          resp.records[0].Id.should.not.be.null;
+          resp.records[0].Status.should.not.be.null;
+          resp.records[0].ApexClassId.should.not.be.null;
+
+          // wait 5 seconds and then get the test results
+          console.log("     Info: Waiting 5 seconds for salesforce tests to finish.");
+          setTimeout(
+            function () {
+              org.toolingTests.getAsyncTestResults({ids: [resp.records[0].Id]}, function(err, resp) {
+                if (err) console.log(err);
+                resp.size.should.eql(2);
+                resp.totalSize.should.eql(2);
+                resp.records.should.be.instanceof(Array);
+                resp.records[0].Outcome.should.eql("Pass");
+                done();
+              });
+            }
+          , 5000);
+        });
+      });
+    })
+  })
 
   // create the apex class and test class
   before(function(done){
@@ -73,7 +143,7 @@ describe('runTests', function() {
             // now insert the test class AFTER the apex class was inserted.
             var apexTestClass = { 
               name: "ToolingApiMocha_Test",
-              body: "@isTest\n private class ToolingApiMocha_Test {\n\n static testMethod void assertName() {\n ToolingApiMocha t = new ToolingApiMocha();\n System.assert(t.getName() == 'name');\n}\n\n}"
+              body: "@isTest\n private class ToolingApiMocha_Test {\n\nstatic testMethod void assertName() {\nToolingApiMocha t = new ToolingApiMocha();\nSystem.assert(t.getName() == 'name');\n}\nstatic testMethod void assertNotName(){\nToolingApiMocha t = new ToolingApiMocha();\nSystem.assert(t.getName() != 'notname');\n}\n\n}"
             };
 
             org.toolingTests.insert({type: 'ApexClass', object: apexTestClass}, function(err, resp) {
