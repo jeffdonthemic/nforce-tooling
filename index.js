@@ -218,11 +218,7 @@ module.exports = function(nforce, pluginName) {
     opts.method = 'PATCH';
     opts.body = JSON.stringify(args.object);
 
-    this._apiRequest(opts, function(err, results) {
-      if (err) { return callback(err, null); }
-      if (!err) { return callback(null, {success: true}); }
-    });
-
+    return this._apiRequest(opts, opts.callback);
   });
 
   // deletes a record by id
