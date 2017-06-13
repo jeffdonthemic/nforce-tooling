@@ -390,7 +390,7 @@ module.exports = function(nforce, pluginName) {
     // enclose each id with a single quote for sql
     var sqlIds = "'" + args.ids.join("','") + "'";
     var opts = this._getOpts(args, callback);
-    var q = "select StackTrace, Message, AsyncApexJobId, MethodName, Outcome, ApexClass.Id, ApexClass.Name ";
+    var q = "select StackTrace, Message, AsyncApexJobId, MethodName, Outcome, ApexClass.Id, ApexClass.Name, RunTime, TestTimeStamp ";
     q += "from ApexTestResult where QueueItemId IN ("+sqlIds+")";
 
     if (validator.error) return callback(new Error(validator.message), null);
